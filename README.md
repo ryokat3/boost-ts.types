@@ -6,7 +6,7 @@ This library includes useful generic type functions working for TypeScript types
 
 <p align="center">
   <a href="https://github.com/ryokat3/boost-ts.types">
-    <img src="https://github.com/ryokat3/boost-ts.types/actions/workflows/test.yml/badge.svg?branch=master" alt="test status" height="20">
+    <img src="https://github.com/ryokat3/boost-ts.types/actions/workflows/test.yml/badge.svg?branch=main" alt="test status" height="20">
   </a>
 </p>
 
