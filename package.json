@@ -1,0 +1,38 @@
+{
+  "name": "boost-ts.types",
+  "version": "0.0.1",
+  "description": "TypeScript Types to boost functional programming",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "test": "mocha --exit -r ts-node/register test/**/*.spec.ts",
+    "clean": "shx rm -rf dist",
+    "publish": "npm run clean && npm run build && shx cp package.json README.md dist && cd dist && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wak109/boost-ts.types.git"
+  },
+  "keywords": [
+    "typescript",
+    "functional-programming"
+  ],
+  "author": "ryokat3 <ryokat3@gmail.com> (https://github.com/ryokat3)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ryokat3/boost-ts.types/issues"
+  },
+  "homepage": "https://github.com/ryokat3/boost-ts.types#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.2.1",
+    "@types/mocha": "^10.0.10",
+    "chai": "^5.2.0",
+    "mocha": "^11.1.0",
+    "shx": "^0.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
