@@ -1,15 +1,22 @@
 import { Cast, Length } from "./basic"
 import { Tail } from "./tuple"
+import { Equals } from "./test"
 
 type Cofunc<T> = T extends any ? (x:T)=>void : never
 type Extends<T> = [T] extends [(x:infer X)=>void] ? X : never
-export type UnionTail<U> = Extends<Extends<Cofunc<Cofunc<U>>>>
-export type UnionPop<U> = Exclude<U, UnionTail<U>>
-type IsUnion<U> = [U] extends [Extends<Cofunc<Cofunc<U>>>] ? false : true
 
-export type UnionToTuple<U, List extends unknown[] = []> =
-    [U] extends [never] ? List :
-        IsUnion<U> extends true ? UnionToTuple<Exclude<U, UnionTail<U>>, [UnionTail<U>, ...List]> : [U, ...List]
+type _IsUnion<U> = [U] extends [Extends<Extends<Cofunc<Cofunc<U>>>>] ? false : true
+// BINU: Boolean Is Not Union
+export type IsUnion<U, BINU extends boolean = true> = Equals<U, boolean> extends true ? BINU extends true ? false: _IsUnion<U> : _IsUnion<U>
+
+type _UnionHead<U> = Extends<Extends<Cofunc<Cofunc<U>>>>
+
+export type UnionHead<U, BINU extends boolean = true> = BINU extends false ? _UnionHead<U> : boolean extends U ? _UnionHead<U> extends boolean ? boolean : _UnionHead<U> : _UnionHead<U>
+export type UnionTail<U, BINU extends boolean = true> = Exclude<U, UnionHead<U, BINU>>
+
+export type UnionToTuple<U, BINU extends boolean = true, Tpl extends unknown[] = []> =
+    [U] extends [never] ? Tpl :
+        IsUnion<U, BINU> extends true ? UnionToTuple<Exclude<U, UnionHead<U, BINU>>, BINU, [UnionHead<U, BINU>, ...Tpl]> : [U, ...Tpl]
 
 export type ObjectToEntries<T, Keys extends (keyof T)[] = [never], Entries extends unknown[] = []> = 
     Keys extends [never] ? ObjectToEntries<T, Cast<UnionToTuple<keyof T>, (keyof T)[]>, Entries> :

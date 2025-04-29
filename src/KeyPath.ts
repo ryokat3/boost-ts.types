@@ -1,17 +1,15 @@
 import { Cast } from "./basic"
-import { UnionTail } from "./union"
+import { UnionHead } from "./union"
 
 
-type AddKeyPath<A, B> = A extends string ? B extends string ? `${A}.${B}` : A : B extends string ? `.${B}` : ""
-type GetOneKey<T> = Cast<UnionTail<keyof T>, keyof T>
+type AddKeyPath<A, B, Sep extends string, HeadingSep extends boolean> = A extends string ? B extends string ? `${A}${Sep}${B}` : A : B extends string ? HeadingSep extends true ? `${Sep}${B}` : `${B}` : ""
+type GetOneKey<T> = Cast<UnionHead<keyof T>, keyof T>
 
-type KeyPathDataType<ValueType> = { [key:string]: ValueType|KeyPathDataType<ValueType> } 
-
-export type KeyPath<T, ValueType = string|number|boolean|null, ParentKey extends string|null = null> =
-    T extends KeyPathDataType<ValueType> ?
+export type KeyPath<T, Sep extends string = ".", HeadingSep extends boolean = true, ParentKey extends string|null = null> =
+    T extends Record<string, unknown> ?
         keyof T extends never ?
             {} :
-            KeyPath<T[GetOneKey<T>], ValueType, AddKeyPath<ParentKey, GetOneKey<T>>> & KeyPath<Omit<T, GetOneKey<T>>, ValueType, ParentKey> :
+            KeyPath<T[GetOneKey<T>], Sep, HeadingSep, AddKeyPath<ParentKey, GetOneKey<T>, Sep, HeadingSep>> & KeyPath<Omit<T, GetOneKey<T>>, Sep, HeadingSep, ParentKey> :
         ParentKey extends string ?
             Record<ParentKey, T> :
             {}
