@@ -1,7 +1,7 @@
 {
   "name": "boost-ts.types",
-  "version": "0.0.1",
-  "description": "TypeScript Types to boost functional programming",
+  "version": "0.0.2",
+  "description": "Typescript advanced type collection",
   "main": "index.js",
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
@@ -11,11 +11,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wak109/boost-ts.types.git"
+    "url": "git+https://github.com/ryokat3/boost-ts.types.git"
   },
   "keywords": [
-    "typescript",
-    "functional-programming"
+    "typescript", "advanced types"
   ],
   "author": "ryokat3 <ryokat3@gmail.com> (https://github.com/ryokat3)",
   "license": "MIT",
