@@ -1,3 +1,5 @@
+<!-- vim: set tabstop=4 expandtab shiftwidth=4 softtabstop=4: -->
+
 # boost-ts.types
 
 Collection of advanced Typescript types to boost type programming
@@ -11,38 +13,90 @@ Collection of advanced Typescript types to boost type programming
 This collection mainly offers type operation for structured/complicated types, like tuple, union, object data type.
 By using this collection, "as any" can be avoided for the complicated type of Typescript functions.
 
+<!-- ------------------------------------------------------------------------ -->
+## Object
+
+
+```typescript
+type TrackAthlete = {
+    "name": string
+    "best": {
+        "100m": number
+        "200m": number
+    }
+}
+```
+
+### KeyPath
+
+```typescript
+type Target1 = KeyPath<TrackAthlete, ".", false>
+
+type Target1Is = {
+    "name": string
+    "best.100m" : number
+    "best.200m" : number
+}
+```
+
+```typescript
+type Target2 = KeyPath<TrackAthlete, "/", true>
+
+type Target2Is = {
+    "/name": string
+    "/best/100m" : number
+    "/best/200m" : number
+}
+```
+
+### KeyArray
+
+```typescript
+type Target3 = KeyArray<TrackAthlete>
+
+type Target3Is = [
+    [ [ "name" ], string ],
+    [ [ "best", "100m" ], number ],
+    [ [ "best", "200m" ], number ]
+]
+```
+
+
+<!-- ------------------------------------------------------------------------ -->
+## Tuple
+
 ### Head
 
 Get the head of type tuple.
 
-```ts
-type Target = Head<[Date, string, number]>
+```typescript
 // type Target = Date
+type Target = Head<[Date, string, number]>
 ```
 
 ### Tail
 
 Remove a type from the head of type tuple.
 
-```ts
-type Target = Tail<[Date, string, number]>
+```typescript
 // type Target = [string, number]
+type Target = Tail<[Date, string, number]>
 ```
 
 ### Push
 
 Add a type to the head of type tuple.
 
-```ts
-type Target = Push<Date, [string, number]>
+```typescript
 // type Target = [Date, string, number]
+type Target = Push<Date, [string, number]>
 ```
 
 ### Reverse
 
 Reverse the order of type tuple.
 
-```ts
+```typescript
 // Target = [number, string, boolean]
 type Target = Reverse<[boolean, string, number]>
 ```
@@ -51,7 +105,7 @@ type Target = Reverse<[boolean, string, number]>
 
 Remove a type from type tuple.
 
-```ts
+```typescript
 // Target = [boolean, number]
 type Target = TupleOmit<string, [boolean, string, number]>
 ```
@@ -60,7 +114,7 @@ type Target = TupleOmit<string, [boolean, string, number]>
 
 Fileter a type from type tuple.
 
-```ts
+```typescript
 // Target = [string, number]
 type Target = TuplePick<string|number, [boolean, string, number]>
 ```
@@ -69,16 +123,19 @@ type Target = TuplePick<string|number, [boolean, string, number]>
 
 Zip two type tuples.
 
-```ts
+```typescript
 // Target = [ [1, boolean], [2, string, [3, number] ]
 type Target = Zip<[1, 2, 3], [boolean, string, number]>
 ```
+
+<!-- ------------------------------------------------------------------------ -->
+## Number
 
 ### Decrease
 
 Decrease a number type.
 
-```ts
+```typescript
 // Target = 3
 type Target = Decrease<4>
 ```
@@ -87,7 +144,7 @@ type Target = Decrease<4>
 
 Compare two number types.
 
-```ts
+```typescript
 // Target1 = -1
 type Target1 = Comp<1, 2>
 // Target2 = 0

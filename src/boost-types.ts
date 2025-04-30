@@ -102,16 +102,7 @@ export type MapUnion<T, List extends any[]> = {
 }[ List['length'] extends 0|1|2|3|4|5|6|7|8  ? List['length'] : never ]
 
 
-export type ToUnion<List extends any[]> = {
-    1: List[0]    
-    2: List[0] | List[1]
-    3: List[0] | List[1] | List[2]
-    4: List[0] | List[1] | List[2] | List[3]
-    5: List[0] | List[1] | List[2] | List[3] | List[4]
-    6: List[0] | List[1] | List[2] | List[3] | List[4] | List[5]
-    7: List[0] | List[1] | List[2] | List[3] | List[4] | List[5] | List[6]
-    8: List[0] | List[1] | List[2] | List[3] | List[4] | List[5] | List[6] | List[7]
-}[ List['length'] extends 1|2|3|4|5|6|7|8  ? List['length'] : never ]
+
 
 export type SelectToUnion<T, List extends any[]> = {
     1: (List[0] extends T ? List[0] : never)
