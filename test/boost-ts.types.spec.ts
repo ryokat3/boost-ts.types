@@ -1,5 +1,5 @@
 import * as chai from "chai"
-import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath } from "../src/index"
+import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Append, IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray } from "../src/index"
 
 
 describe("typelib", ()=>{
@@ -70,13 +70,31 @@ describe("typelib", ()=>{
 
         chai.assert.isTrue(result)
     })
-    it("Unshift", ()=>{
+    it("Initial", ()=>{
 
         const result:IsAllTrue<[
             Equals<Initial<[string, number]>, [string]>,
             Equals<Initial<[string, "hello", number]>, [string, "hello"]>,
             Equals<Initial<[string]>, []>,
             Equals<Initial<[]>, []>,
+        ]> = true
+
+        chai.assert.isTrue(result)
+    })
+    it("Push", ()=>{
+
+        const result:IsAllTrue<[
+            Equals<Push<Date, [string, number]>, [Date, string, number]>,
+            Equals<Push<Date, []>, [Date]>
+        ]> = true
+
+        chai.assert.isTrue(result)
+    })
+    it("Append", ()=>{
+
+        const result:IsAllTrue<[
+            Equals<Append<Date, [string, number]>, [string, number, Date]>,
+            Equals<Append<Date, []>, [Date]>
         ]> = true
 
         chai.assert.isTrue(result)
@@ -150,6 +168,24 @@ describe("typelib", ()=>{
             ".alias-key" extends keyof KeyPath<Target> ? false : true,
             ".alias-key.key" extends keyof KeyPath<Target> ? true : false,            
             Equals<Length<UnionToTuple<keyof KeyPath<Target>>>, 5>
+        ]> = true
+                
+        chai.assert.isTrue(result)
+    })
+    it("KeyArray", ()=>{
+        interface IntfData { "key": Date }
+        type AliasData = { "key": Date }
+
+        type Target = { "key1": { "key2": string|number, "key3": number}, "key4": null, "intf-key":IntfData, "alias-key": AliasData}
+        type Result = KeyArray<Target>        
+        
+        const result:IsAllTrue<[            
+            [ ["key1", "key2"], number|string ] extends Result ? true : false,            
+            [ ["key1", "key3"], number ] extends Result ? true : false,
+            [ ["key4" ], null ] extends Result ? true : false,
+            [ ["intf-key" ], IntfData ] extends Result ? true : false,
+            [ ["alias-key", "key" ], Date ] extends Result ? true : false,
+            Equals<Length<UnionToTuple<Result>>, 5>      
         ]> = true
                 
         chai.assert.isTrue(result)

@@ -14,11 +14,9 @@ type InitialRvs<Tpl extends any[], Result extends any[] = []> = Length<Tpl> exte
 
 export type Initial<Tpl extends any[]> = Length<Tpl> extends 0 ? [] : Length<Tpl> extends 1 ? [] : Reverse<InitialRvs<Tpl>>
 
-export type Push<T, Tpl extends any[]> = T extends None ? Tpl : ((a: T, ...b: Tpl) => void) extends ((...a: infer Result) => void) ? Result : never
-
 export type Reverse<Tpl extends any[]> = {
     0: []
-    1: Tpl
+    1: [Tpl[0]]
     2: [Tpl[1], Tpl[0]]
     3: [Tpl[2], Tpl[1], Tpl[0]]
     4: [Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
@@ -26,7 +24,19 @@ export type Reverse<Tpl extends any[]> = {
     6: [Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
     7: [Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
     8: [Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
-}[ Tpl['length'] extends 0|1|2|3|4|5|6|7|8 ? Tpl['length'] : never ]
+    9: [Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
+    10: [Tpl[9], Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
+    11: [Tpl[10], Tpl[9], Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
+    12: [Tpl[11], Tpl[10], Tpl[9], Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
+    13: [Tpl[12], Tpl[11], Tpl[10], Tpl[9], Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
+    14: [Tpl[13], Tpl[12], Tpl[11], Tpl[10], Tpl[9], Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
+    15: [Tpl[14], Tpl[13], Tpl[12], Tpl[11], Tpl[10], Tpl[9], Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
+    16: [Tpl[15], Tpl[14], Tpl[13], Tpl[12], Tpl[11], Tpl[10], Tpl[9], Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
+}[ Tpl['length'] extends 0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16 ? Tpl['length'] : never ]
+
+export type Push<T, Tpl extends any[]> = T extends None ? Tpl : ((a: T, ...b: Tpl) => void) extends ((...a: infer Result) => void) ? Result : never
+
+export type Append<T, Tpl extends any[]> = Reverse<Push<T, Reverse<Tpl>>>
 
 
 
