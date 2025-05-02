@@ -1,13 +1,13 @@
 {
   "name": "boost-ts.types",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Typescript advanced type collection",
   "main": "index.js",
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
     "test": "mocha --exit -r ts-node/register test/**/*.spec.ts",
     "clean": "shx rm -rf dist",
-    "publish": "npm run clean && npm run build && shx cp package.json README.md dist && cd dist && npm publish"
+    "publish": "npm run clean && npm run build && shx cp package.json README.md tsconfig.build.json dist && cd dist && npm publish"
   },
   "repository": {
     "type": "git",

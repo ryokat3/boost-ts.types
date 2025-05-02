@@ -1,5 +1,5 @@
 import * as chai from "chai"
-import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Append, IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray } from "../src/index"
+import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Append, ZipFind, IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray } from "../src/index"
 
 
 describe("typelib", ()=>{
@@ -95,6 +95,18 @@ describe("typelib", ()=>{
         const result:IsAllTrue<[
             Equals<Append<Date, [string, number]>, [string, number, Date]>,
             Equals<Append<Date, []>, [Date]>
+        ]> = true
+
+        chai.assert.isTrue(result)
+    })
+    it("ZipFind", ()=>{
+        type Zp = [ ["key1", 1], ["key2", 2], ["key3", 3] ]
+
+        const result:IsAllTrue<[
+            Equals<ZipFind<"key1", Zp>, 1>,    
+            Equals<ZipFind<"key2", Zp>, 2>,
+            Equals<ZipFind<"key3", Zp>, 3>,
+            Equals<ZipFind<"key4", Zp>, never>      
         ]> = true
 
         chai.assert.isTrue(result)

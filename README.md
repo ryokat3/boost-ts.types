@@ -18,7 +18,7 @@ By using this collection, "as any" can be avoided for the complicated type of Ty
 
 
 ```typescript
-type TrackAthlete = {
+type Sprinter = {
     "name": string
     "best": {
         "100m": number
@@ -29,35 +29,31 @@ type TrackAthlete = {
 
 ### KeyPath
 
-```typescript
-type Target1 = KeyPath<TrackAthlete, ".", false>
+Generate
 
-type Target1Is = {
-    "name": string
-    "best.100m" : number
-    "best.200m" : number
+```typescript
+const target:KeyPath<Sprinter, ".", false> = {
+    "name": "Usain Bolt"
+    "best.100m" : 9.58
+    "best.200m" : 19.19
 }
 ```
 
 ```typescript
-type Target2 = KeyPath<TrackAthlete, "/", true>
-
-type Target2Is = {
-    "/name": string
-    "/best/100m" : number
-    "/best/200m" : number
+const target:KeyPath<Sprinter, "/", true> = {
+    "/name": "Usain Bolt"
+    "/best/100m" : 9.58
+    "/best/200m" : 19.19
 }
 ```
 
 ### KeyArray
 
 ```typescript
-type Target3 = KeyArray<TrackAthlete>
-
-type Target3Is = [
-    [ [ "name" ], string ],
-    [ [ "best", "100m" ], number ],
-    [ [ "best", "200m" ], number ]
+const target:KeyArray<Sprinter> = {
+    [ [ "name" ], "Usain Bolt" ],
+    [ [ "best", "100m" ], 9.58 ],
+    [ [ "best", "200m" ], 19.19 ]
 ]
 ```
 
