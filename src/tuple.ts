@@ -38,6 +38,7 @@ export type Push<T, Tpl extends any[]> = T extends None ? Tpl : ((a: T, ...b: Tp
 
 export type Append<T, Tpl extends any[]> = Reverse<Push<T, Reverse<Tpl>>>
 
+export type Plus<T1 extends any[], T2 extends any[]> = T2 extends [] ? T1 : Plus<Push<Head<T2>, T1>, Tail<T2>>
 
 
 type TplOmit1<T, Tpl extends any[]> = Tpl[0] extends T  ? [] : Tpl

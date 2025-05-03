@@ -1,5 +1,6 @@
 import * as chai from "chai"
-import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Append, ZipFind, IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray } from "../src/index"
+import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Append, Plus, ZipFind,
+    IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray, KeyArrayApply } from "../src/index"
 
 
 describe("typelib", ()=>{
@@ -99,6 +100,15 @@ describe("typelib", ()=>{
 
         chai.assert.isTrue(result)
     })
+    it("Plus", ()=>{
+
+        const result:IsAllTrue<[
+            Equals<Plus<[string], [number]>, [number, string]>
+            
+        ]> = true
+
+        chai.assert.isTrue(result)
+    })
     it("ZipFind", ()=>{
         type Zp = [ ["key1", 1], ["key2", 2], ["key3", 3] ]
 
@@ -167,7 +177,7 @@ describe("typelib", ()=>{
 
         type Target = { "key1": { "key2": string|number, "key3": number}, "key4": null, "intf-key":IntfData, "alias-key": AliasData}
 
-        const result:IsAllTrue<[            
+        const result:IsAllTrue<[                        
             Equals<KeyPath<Target>[".key1.key2"], string|number>,
             Equals<KeyPath<Target>[".key1.key3"], number>,
             Equals<KeyPath<Target>[".key4"], null>,
@@ -188,16 +198,30 @@ describe("typelib", ()=>{
         interface IntfData { "key": Date }
         type AliasData = { "key": Date }
 
-        type Target = { "key1": { "key2": string|number, "key3": number}, "key4": null, "intf-key":IntfData, "alias-key": AliasData}
-        type Result = KeyArray<Target>        
+        type Target = { "key1": { "key2": string|number, "key3": number}, "key4": null, "intf-key":IntfData, "alias-key": AliasData}        
         
-        const result:IsAllTrue<[            
-            [ ["key1", "key2"], number|string ] extends Result ? true : false,            
-            [ ["key1", "key3"], number ] extends Result ? true : false,
-            [ ["key4" ], null ] extends Result ? true : false,
-            [ ["intf-key" ], IntfData ] extends Result ? true : false,
-            [ ["alias-key", "key" ], Date ] extends Result ? true : false,
-            Equals<Length<UnionToTuple<Result>>, 5>      
+        const result:IsAllTrue<[
+            KeyArray<Target> extends string[] ? true : false,
+            Equals<KeyArray<Target>, ["key1", "key2"] | ["key1", "key3"] | ["key4" ] | ["intf-key" ] | ["alias-key", "key" ]>,
+            Equals<KeyArray<Target, true>, ["key1", "key2"] | ["key1", "key3"] | "key4" | "intf-key" | ["alias-key", "key" ]>            
+        ]> = true
+                
+        chai.assert.isTrue(result)
+    })
+    it("KeyArrayApply", ()=>{
+        interface IntfData { "key": Date }
+        type AliasData = { "key": Date }
+
+        type Target = { "key1": { "key2": string|number, "key3": number}, "key4": null, "intf-key":IntfData, "alias-key": AliasData}        
+        
+        const result:IsAllTrue<[
+            Equals<KeyArrayApply<Target, ["key1", "key2"]>, string|number>,
+            Equals<KeyArrayApply<Target, ["key1", "key3"]>, number>,
+            Equals<KeyArrayApply<Target, ["key4"]>, null>,
+            Equals<KeyArrayApply<Target, "key4">, null>,
+            Equals<KeyArrayApply<Target, ["intf-key"]>, IntfData>,
+            Equals<KeyArrayApply<Target, "intf-key">, IntfData>,
+            Equals<KeyArrayApply<Target, ["alias-key", "key"]>, Date>,
         ]> = true
                 
         chai.assert.isTrue(result)

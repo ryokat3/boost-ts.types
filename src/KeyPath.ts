@@ -1,6 +1,6 @@
-import { Cast } from "./basic"
+import { Cast, Length } from "./basic"
 import { UnionHead } from "./union"
-import { Push, Reverse } from "./tuple"
+import { Push, Reverse, Head, Tail } from "./tuple"
 
 
 type GetOneKey<T> = T extends Record<string,unknown> ? Cast<UnionHead<keyof T>, keyof T & string> : never
@@ -17,11 +17,14 @@ export type KeyPath<T, Sep extends string = ".", HeadingSep extends boolean = tr
             Record<ParentKey, T> :
             {}
 
-export type KeyArray<T, ParentKey extends string[] = []> =
+export type KeyArray<T, SingleKeyUnarray extends boolean = false, ParentKey extends string[] = []> =
     GetOneKey<T> extends never ?
         ParentKey extends [] ?
             never :
-            [ Reverse<ParentKey>, T ]:
+            Length<ParentKey> extends 1 ? SingleKeyUnarray extends true ? ParentKey[0] : Reverse<ParentKey> : Reverse<ParentKey> :
     GetOneKey<Omit<T, GetOneKey<T>>> extends never ?
-        KeyArray<T[GetOneKey<T>], Push<GetOneKey<T>, ParentKey>> :
-        KeyArray<T[GetOneKey<T>], Push<GetOneKey<T>, ParentKey>> | KeyArray<Omit<T, GetOneKey<T>>, ParentKey>                    
+        KeyArray<T[GetOneKey<T>], SingleKeyUnarray, Push<GetOneKey<T>, ParentKey>> :
+        KeyArray<T[GetOneKey<T>], SingleKeyUnarray, Push<GetOneKey<T>, ParentKey>> | KeyArray<Omit<T, GetOneKey<T>>, SingleKeyUnarray, ParentKey>
+
+export type KeyArrayApply<T, KA extends string[]|string> =
+    KA extends [] ? T : KA extends string[] ? Head<KA> extends keyof T ? KeyArrayApply<T[Head<KA>], Tail<KA>> : never : KA extends keyof T & string ? T[KA] : never
