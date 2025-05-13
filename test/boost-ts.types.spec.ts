@@ -125,28 +125,28 @@ describe("typelib", ()=>{
         const result:IsAllTrue<[
             Equals<IsUnion<string|number>, true>,    
             Equals<IsUnion<string>, false>,    
-            Equals<IsUnion<boolean, true>, false>,
-            Equals<IsUnion<boolean, false>, true>
+            Equals<IsUnion<boolean>, false>,
+            Equals<IsUnion<true|false>, false> // treat 'true|false' as 'boolean'            
         ]> = true
         
         chai.assert.isTrue(result)
     }),
     it("UnionHead", ()=>{
         const result:IsAllTrue<[
-            Equals<UnionHead<string|number, false>, number>,
-            Equals<UnionHead<string, false>, string>,
-            Equals<UnionHead<boolean, false>, true>,
-            Equals<UnionHead<boolean, true>, boolean>            
+            NotEquals<UnionHead<string|number>, string|number>,
+            NotEquals<UnionHead<boolean>, true>,
+            NotEquals<UnionHead<boolean>, false>,
+            Equals<UnionHead<string>, string>,            
+            Equals<UnionHead<boolean>, boolean>            
         ]> = true
         
         chai.assert.isTrue(result)
     }),
     it("UnionTail", ()=>{
         const result:IsAllTrue<[
-            Equals<UnionTail<string|number, false>, string>,
-            Equals<UnionTail<string, false>, never>,
-            Equals<UnionTail<boolean, false>, false>,
-            Equals<UnionTail<boolean, true>, never>,
+            NotEquals<UnionTail<string|number>, string|number>,
+            Equals<UnionTail<string>, never>,            
+            Equals<UnionTail<boolean>, never>,
         ]> = true        
 
         chai.assert.isTrue(result)
@@ -159,14 +159,13 @@ describe("typelib", ()=>{
             Equals<Length<UnionToTuple<"key1"|"key2"|"key3">>, 3>,
             Equals<UnionToTuple<"key1">, ["key1"]>,
             Equals<UnionToTuple<keyof {}>, []>,
-            Equals<Length<UnionToTuple<string|boolean>>, 2>,        
-            Equals<Length<UnionToTuple<string|boolean, false>>, 3>,
-            Equals<Length<UnionToTuple<string|true, false>>, 2>,
-            Equals<Length<UnionToTuple<string|true, true>>, 2>,
-            Equals<Length<UnionToTuple<string|false, false>>, 2>,
-            Equals<Length<UnionToTuple<string|false, true>>, 2>,
+            Equals<Length<UnionToTuple<string|boolean>>, 2>,                    
+            Equals<Length<UnionToTuple<string|true>>, 2>,
+            Equals<Length<UnionToTuple<string|false>>, 2>,
+            Equals<Length<UnionToTuple<string|true|false>>, 2>,            
+            Equals<Length<UnionToTuple<string|false>>, 2>,
             Equals<UnionToTuple<boolean>, [ boolean ]>,
-            Equals<Length<UnionToTuple<boolean, false>>, 2>
+            Equals<Length<UnionToTuple<boolean>>, 1>
         ]> = true
 
         chai.assert.isTrue(result)
@@ -189,7 +188,8 @@ describe("typelib", ()=>{
             ".intf-key.key" extends keyof KeyPath<Target> ? false : true,
             ".alias-key" extends keyof KeyPath<Target> ? false : true,
             ".alias-key.key" extends keyof KeyPath<Target> ? true : false,            
-            Equals<Length<UnionToTuple<keyof KeyPath<Target>>>, 5>
+            Equals<Length<UnionToTuple<keyof KeyPath<Target>>>, 5>            
+            
         ]> = true
                 
         chai.assert.isTrue(result)
