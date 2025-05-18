@@ -1,6 +1,6 @@
 {
   "name": "boost-ts.types",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Typescript advanced type collection",
   "types": "src/index.ts",
   "scripts": {
