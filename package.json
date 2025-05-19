@@ -1,6 +1,6 @@
 {
   "name": "boost-ts.types",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Typescript advanced type collection",
   "types": "src/index.ts",
   "scripts": {
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ryokat3/boost-ts.types.git"
+    "url": "git://github.com/ryokat3/boost-ts.types.git"
   },
   "keywords": [
     "typescript",
