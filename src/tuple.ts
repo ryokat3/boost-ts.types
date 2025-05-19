@@ -200,6 +200,7 @@ export type ZipFind<T, Zp extends [any, any][], NotFound=never> = {
     16: Zp[0][0] extends T ? Zp[0][1] : Zp[1][0] extends T ? Zp[1][1] : Zp[2][0] extends T ? Zp[2][1] : Zp[3][0] extends T ? Zp[3][1] : Zp[4][0] extends T ? Zp[4][1] : Zp[5][0] extends T ? Zp[5][1] : Zp[6][0] extends T ? Zp[6][1] : Zp[7][0] extends T ? Zp[7][1] : Zp[8][0] extends T ? Zp[8][1] : Zp[9][0] extends T ? Zp[9][1] : Zp[10][0] extends T ? Zp[10][1] : Zp[11][0] extends T ? Zp[11][1] : Zp[12][0] extends T ? Zp[12][1] : Zp[13][0] extends T ? Zp[13][1] : Zp[14][0] extends T ? Zp[14][1] : Zp[15][0] extends T ? Zp[15][1] : NotFound
 }[ Zp['length'] extends 1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16 ? Zp['length'] : never]
 
+/*
 export type TupleToUnion<Tpl extends any[]> = {
     1: Tpl[0]    
     2: Tpl[0] | Tpl[1]
@@ -218,3 +219,5 @@ export type TupleToUnion<Tpl extends any[]> = {
     15: Tpl[0] | Tpl[1] | Tpl[2] | Tpl[3] | Tpl[4] | Tpl[5] | Tpl[6] | Tpl[7] | Tpl[8] | Tpl[9] | Tpl[10] | Tpl[11] | Tpl[12] | Tpl[13] | Tpl[14]
     16: Tpl[0] | Tpl[1] | Tpl[2] | Tpl[3] | Tpl[4] | Tpl[5] | Tpl[6] | Tpl[7] | Tpl[8] | Tpl[9] | Tpl[10] | Tpl[11] | Tpl[12] | Tpl[13] | Tpl[14] | Tpl[15]
 }[ Tpl['length'] extends 1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16  ? Tpl['length'] : never ]
+*/
+export type TupleToUnion<Tpl extends any[]> = [ Tpl ] extends [ (infer U)[] ] ? U : never

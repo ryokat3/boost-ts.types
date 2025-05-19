@@ -122,10 +122,14 @@ describe("typelib", ()=>{
         chai.assert.isTrue(result)
     })
     it("TupleToUnion", ()=>{
-        type Tpl = [ "key1", "key2", "key3" ]
-
+        
         const result:IsAllTrue<[
-            Equals<TupleToUnion<Tpl>, "key1"|"key2"|"key3">,                                        
+            Equals<TupleToUnion<[ "key1", "key2", "key3" ]>, "key1"|"key2"|"key3">,                                        
+            Equals<TupleToUnion<[ "key1", "key1", "key3" ]>, "key1"|"key3">,                                        
+            Equals<TupleToUnion<[ string, number, Date ]>, string|number|Date>,                                        
+            Equals<TupleToUnion<[ string, number, never ]>, string|number>,                                        
+            Equals<TupleToUnion<[ string  ]>, string>,                                        
+            Equals<TupleToUnion<[ ]>, never>,                                        
         ]> = true
 
         chai.assert.isTrue(result)
