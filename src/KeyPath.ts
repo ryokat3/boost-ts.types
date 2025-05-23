@@ -76,7 +76,7 @@ type KeyPathUnbox<T> =
 
 type Merge<T> = { [Key in keyof T]: T[Key] }    
 
-export type KeyPath<T> = Merge<KeyPathUnbox<KeyPathSub<T>>>
+export type KeyPath<T, Sep extends string = ".", HeadingSep extends boolean = true, ValueType = any> = Merge<KeyPathUnbox<KeyPathSub<T,Sep,HeadingSep,ValueType>>>
 
 
 export type KeyArray<T, SingleKeyUnarray extends boolean = false, ParentKey extends string[] = []> =

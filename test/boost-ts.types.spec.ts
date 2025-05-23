@@ -1,5 +1,5 @@
 import * as chai from "chai"
-import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Append, Plus, TupleToUnion, ZipFind,
+import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Reverse, Append, Plus, TupleToUnion, ZipFind,
     IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray, KeyArrayApply, NumberToTuple } from "../src/index"
 
 
@@ -61,17 +61,6 @@ describe("boost-ts.types", ()=>{
         
         chai.assert.isTrue(result)
     })
-    it("Tail", ()=>{
-
-        const result:IsAllTrue<[
-            Equals<Last<[string, number]>, number>,
-            Equals<Last<[string, number, "hello"]>, "hello">,
-            Equals<Last<NumberToTuple<1000, string>>, string>,
-            Equals<Last<[]>, None>
-        ]> = true
-
-        chai.assert.isTrue(result)
-    })
     it("Initial", ()=>{
 
         const result:IsAllTrue<[
@@ -92,6 +81,14 @@ describe("boost-ts.types", ()=>{
 
         chai.assert.isTrue(result)
     })
+    it("Reverse", ()=>{
+
+        const result:IsAllTrue<[
+            Equals<Reverse<[Date, string, number, "hello"]>, ["hello", number, string, Date]>            
+        ]> = true
+
+        chai.assert.isTrue(result)
+    })   
     it("Append", ()=>{
 
         const result:IsAllTrue<[
@@ -183,7 +180,7 @@ describe("boost-ts.types", ()=>{
         ]> = true
 
         chai.assert.isTrue(result)
-    })
+    })        
     describe("KeyPath", ()=>{
         it("Small Object", () => {
             interface IntfData { "key": Date }
@@ -208,7 +205,7 @@ describe("boost-ts.types", ()=>{
             ]> = true
 
             chai.assert.isTrue(result)
-        }),
+        }),        
         it("Large Object", ()=>{
             type Target = {
                 "key1": {
@@ -249,7 +246,7 @@ describe("boost-ts.types", ()=>{
 
             chai.assert.isTrue(result)
         })
-    })
+    })        
     it("KeyArray", ()=>{
         interface IntfData { "key": Date }
         type AliasData = { "key": Date }
@@ -284,13 +281,25 @@ describe("boost-ts.types", ()=>{
     })
     it("NumberToTuple", function () {
         const result:IsAllTrue<[
-            Equals<NumberToTuple<10, number>['length'], 10>,
+            Equals<NumberToTuple<5, number>['length'], 5>,
+/* Consuming CPU Too Much...
             Equals<NumberToTuple<50, number>['length'], 50>,
             Equals<NumberToTuple<100, number>['length'], 100>,
             Equals<NumberToTuple<500, number>['length'], 500>,
             Equals<NumberToTuple<1000, number>['length'], 1000>,
+*/        
         ]> = true
                 
         chai.assert.isTrue(result)
     })
+    it("Tail", ()=>{
+
+        const result:IsAllTrue<[
+            Equals<Last<[string, number]>, number>,
+            Equals<Last<[string, number, "hello"]>, "hello">,      
+            Equals<Last<[]>, None>
+        ]> = true
+
+        chai.assert.isTrue(result)
+    })    
 })

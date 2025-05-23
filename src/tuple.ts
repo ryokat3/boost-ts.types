@@ -57,7 +57,18 @@ export type Append<T, Tpl extends any[]> = Reverse<Push<T, Reverse<Tpl>>>
 
 export type Plus<T1 extends any[], T2 extends any[]> = T2 extends [] ? T1 : Plus<Push<Head<T2>, T1>, Tail<T2>>
 
+type TplOmitSub<T, Tpl extends unknown[], Result extends unknown[] = []> =
+    Tpl['length'] extends 0 ? { [BXP]: Result } : [ Tpl[0] ] extends [ T ] ? {
+        [BXP]: TplOmitSub<Tail<Tpl>, Result>
+     } : {
+        [BXP]: TplOmitSub<Tail<Tpl>, Push<Tpl[0], Result>>
+     }
 
+export type TplOmit<T, Tpl extends unknown[]> = Reverse<Cast<Unbox<TplOmitSub<T, Tpl>>, any[]>>
+
+type hehe = TplOmit<string, [string, number]>
+
+/*
 type TplOmit1<T, Tpl extends any[]> = Tpl[0] extends T  ? [] : Tpl
 type TplOmit2<T, Tpl extends any[]> = Tpl[0] extends T ? TplOmit1<T, Tail<Tpl>> : Push<Tpl[0], TplOmit1<T, Tail<Tpl>>>
 type TplOmit3<T, Tpl extends any[]> = Tpl[0] extends T ? TplOmit2<T, Tail<Tpl>> : Push<Tpl[0], TplOmit2<T, Tail<Tpl>>>
@@ -94,7 +105,7 @@ export type TupleOmit<T, Tpl extends any[]> = {
     15: TplOmit15<T, Tpl>
     16: TplOmit16<T, Tpl>
 }[ Tpl['length'] extends 0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16 ? Tpl['length'] : never]
-
+*/
 
 type TplPick1<T, Tpl extends any[]> = Tpl[0] extends T ? Tpl : []
 type TplPick2<T, Tpl extends any[]> = Tpl[0] extends T ? Push<Tpl[0], TplPick1<T, Tail<Tpl>>> : TplPick1<T, Tail<Tpl>> 
