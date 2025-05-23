@@ -204,8 +204,7 @@ describe("boost-ts.types", ()=>{
                 ".intf-key.key" extends keyof TargetKeyPath ? false : true,
                 ".alias-key" extends keyof TargetKeyPath ? false : true,
                 ".alias-key.key" extends keyof TargetKeyPath ? true : false,
-                Equals<Length<UnionToTuple<keyof TargetKeyPath>>, 5>,
-                Equals<Length<UnionToTuple<keyof TargetKeyPath>>, 4>,
+                Equals<Length<UnionToTuple<keyof TargetKeyPath>>, 5>,                
             ]> = true
 
             chai.assert.isTrue(result)
@@ -245,8 +244,7 @@ describe("boost-ts.types", ()=>{
                 Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key8.key9.key11"], number>,
                 Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key8.key12"], Date>,
                 Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key13.key14"], string>,
-                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key13.key15"], number>,
-                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key13.key15"], string>,
+                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key13.key15"], number>,                
             ]> = true
 
             chai.assert.isTrue(result)
