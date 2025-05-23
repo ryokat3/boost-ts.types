@@ -1,6 +1,6 @@
 import * as chai from "chai"
 import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Append, Plus, TupleToUnion, ZipFind,
-    IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray, KeyArrayApply } from "../src/index"
+    IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray, KeyArrayApply, NumberToTuple } from "../src/index"
 
 
 describe("typelib", ()=>{
@@ -235,6 +235,17 @@ describe("typelib", ()=>{
             Equals<KeyArrayApply<Target, ["intf-key"]>, IntfData>,
             Equals<KeyArrayApply<Target, "intf-key">, IntfData>,
             Equals<KeyArrayApply<Target, ["alias-key", "key"]>, Date>,
+        ]> = true
+                
+        chai.assert.isTrue(result)
+    })
+    it("NumberToTuple", function () {
+        const result:IsAllTrue<[
+            Equals<NumberToTuple<10, number>['length'], 10>,
+            Equals<NumberToTuple<50, number>['length'], 50>,
+            Equals<NumberToTuple<100, number>['length'], 100>,
+            Equals<NumberToTuple<500, number>['length'], 500>,
+            Equals<NumberToTuple<1000, number>['length'], 1000>,
         ]> = true
                 
         chai.assert.isTrue(result)

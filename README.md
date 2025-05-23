@@ -156,3 +156,4 @@ type Target3 = Comp<2, 1>
   This library will be nothing without workarounds suggested by this blog. [Japanese version](https://kgtkr.net/blog/2019/04/15/typescript-typelevelprogramming-error-suppression) is also published.
 - [typepark](https://www.npmjs.com/package/typepark) is an excellent library that provides the large collection of typescript types manipulation.
 - The code of `Equals` implementation is copied from [this comment](https://github.com/microsoft/TypeScript/issues/27024#issuecomment-421529650)
+- [How to break the limit of recursived type](https://susisu.hatenablog.com/entry/2020/09/12/214343) is a great article (written in Japanese).

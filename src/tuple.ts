@@ -1,6 +1,5 @@
 import { None } from "./None"
-import { Length } from "./basic"
-import { Decrease } from "./number"
+import { Length, BXP, Unbox } from "./basic"
 
 export type At<Tpl extends any[], I extends number> = Length<Tpl> extends 0 ? None : Tpl[I]
 
@@ -8,12 +7,29 @@ export type Head<Tpl extends any[]> = Length<Tpl> extends 0 ? None : Tpl[0]
 
 export type Tail<Tpl extends any[]> = Length<Tpl> extends 0 ? [] : (((...b: Tpl) => void) extends (a:any, ...b: infer I) => void ? I : [])
 
-export type Last<Tpl extends any[]> = Length<Tpl> extends 0 ? None : At<Tpl, Decrease<Length<Tpl>>>
+// export type Last<Tpl extends any[]> = Length<Tpl> extends 0 ? None : At<Tpl, Decrease<Length<Tpl>>>
+
+type LastSub<Tpl extends any[]> = Tpl['length'] extends 0 ? None : Tpl['length'] extends 1 ? Tpl[0] : {
+    [BXP]: ((...b: Tpl) => void) extends ((a:any, ...b: infer T) => void) ? LastSub<T> : never
+}
+
+export type Last<Tpl extends any[]> = Unbox<LastSub<Tpl>>
 
 type InitialRvs<Tpl extends any[], Result extends any[] = []> = Length<Tpl> extends 0 ? Result : Length<Tpl> extends 1 ? Result : InitialRvs<Tail<Tpl>, Push<Head<Tpl>, Result>>
 
 export type Initial<Tpl extends any[]> = Length<Tpl> extends 0 ? [] : Length<Tpl> extends 1 ? [] : Reverse<InitialRvs<Tpl>>
 
+
+    
+export type ReverseSub<Tpl extends any[], Result extends any[] = []> =
+    Tpl['length'] extends 0 ? Result : {
+        [BXP]: ReverseSub<Tail<Tpl>, [ Tpl[0], ...Result ]>
+    }
+
+export type Reverse<Tpl extends any[]> = Extract<Unbox<ReverseSub<Tpl>>, unknown[]>
+
+
+/*
 export type Reverse<Tpl extends any[]> = {
     0: []
     1: [Tpl[0]]
@@ -33,8 +49,9 @@ export type Reverse<Tpl extends any[]> = {
     15: [Tpl[14], Tpl[13], Tpl[12], Tpl[11], Tpl[10], Tpl[9], Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
     16: [Tpl[15], Tpl[14], Tpl[13], Tpl[12], Tpl[11], Tpl[10], Tpl[9], Tpl[8], Tpl[7], Tpl[6], Tpl[5], Tpl[4], Tpl[3], Tpl[2], Tpl[1], Tpl[0]]
 }[ Tpl['length'] extends 0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16 ? Tpl['length'] : never ]
+*/
 
-export type Push<T, Tpl extends any[]> = T extends None ? Tpl : ((a: T, ...b: Tpl) => void) extends ((...a: infer Result) => void) ? Result : never
+export type Push<T, Tpl extends any[]> = T extends None ? Tpl : ((a: T, ...b: Tpl) => void) extends ((...k: infer Result) => void) ? Result : never
 
 export type Append<T, Tpl extends any[]> = Reverse<Push<T, Reverse<Tpl>>>
 
@@ -156,6 +173,7 @@ export type TupleUnzip<Tpl extends [any,any][]> = {
     15: [ [ Tpl[0][0], Tpl[1][0], Tpl[2][0], Tpl[3][0], Tpl[4][0], Tpl[5][0], Tpl[6][0], Tpl[7][0], Tpl[8][0], Tpl[9][0], Tpl[10][0], Tpl[11][0], Tpl[12][0], Tpl[13][0], Tpl[14][0] ], [ Tpl[0][1], Tpl[1][1], Tpl[2][1], Tpl[3][1], Tpl[4][1], Tpl[5][1], Tpl[6][1], Tpl[7][1], Tpl[8][1], Tpl[9][1], Tpl[10][1], Tpl[11][1], Tpl[12][1], Tpl[13][1], Tpl[14][1] ] ]
     16: [ [ Tpl[0][0], Tpl[1][0], Tpl[2][0], Tpl[3][0], Tpl[4][0], Tpl[5][0], Tpl[6][0], Tpl[7][0], Tpl[8][0], Tpl[9][0], Tpl[10][0], Tpl[11][0], Tpl[12][0], Tpl[13][0], Tpl[14][0], Tpl[15][0] ], [ Tpl[0][1], Tpl[1][1], Tpl[2][1], Tpl[3][1], Tpl[4][1], Tpl[5][1], Tpl[6][1], Tpl[7][1], Tpl[8][1], Tpl[9][1], Tpl[10][1], Tpl[11][1], Tpl[12][1], Tpl[13][1], Tpl[14][1], Tpl[15][1] ] ]
 }[ Tpl['length'] extends 0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16 ? Tpl['length'] : never ]
+
 
 /**
  * TupleFind<T, any[]>

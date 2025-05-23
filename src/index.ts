@@ -3,5 +3,5 @@ export { At, Head, Tail, Last, Initial, Push, Append, Plus, Reverse, TupleOmit, 
 export { KeyPath, KeyArray, KeyArrayApply } from "./KeyPath"
 export { IsUnion, UnionHead, UnionTail, UnionToTuple } from "./union"
 export { None } from "./None"
-export { Decrease, Comp } from "./number"
+export { Decrease, Comp, NumberToTuple } from "./number"
 export { Equals, NotEquals, IsAllTrue } from "./test"
