@@ -3,7 +3,7 @@ import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, 
     IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray, KeyArrayApply, NumberToTuple } from "../src/index"
 
 
-describe("typelib", ()=>{
+describe("boost-ts.types", ()=>{
 
     it("Equals, NotEquals", ()=>{
         const result:IsAllTrue<[
@@ -66,6 +66,7 @@ describe("typelib", ()=>{
         const result:IsAllTrue<[
             Equals<Last<[string, number]>, number>,
             Equals<Last<[string, number, "hello"]>, "hello">,
+            Equals<Last<NumberToTuple<1000, string>>, string>,
             Equals<Last<[]>, None>
         ]> = true
 
@@ -183,29 +184,73 @@ describe("typelib", ()=>{
 
         chai.assert.isTrue(result)
     })
-    it("KeyPath", ()=>{
-        interface IntfData { "key": Date }
-        type AliasData = { "key": Date }
+    describe("KeyPath", ()=>{
+        it("Small Object", () => {
+            interface IntfData { "key": Date }
+            type AliasData = { "key": Date }
 
-        type Target = { "key1": { "key2": string|number, "key3": number}, "key4": null, "intf-key":IntfData, "alias-key": AliasData}
+            type Target = { "key1": { "key2": string | number, "key3": number }, "key4": null, "intf-key": IntfData, "alias-key": AliasData }
+            type TargetKeyPath = KeyPath<Target>
 
-        const result:IsAllTrue<[                        
-            Equals<KeyPath<Target>[".key1.key2"], string|number>,
-            Equals<KeyPath<Target>[".key1.key3"], number>,
-            Equals<KeyPath<Target>[".key4"], null>,
-            Equals<KeyPath<Target, "/">["/key1/key2"], string|number>,
-            Equals<KeyPath<Target, ".", false>["key1.key2"], string|number>,
-            Equals<KeyPath<Target, ".", false>["key4"], null>,
-            Equals<KeyPath<Target, ".", true>[".key4"], null>,
-            ".intf-key" extends keyof KeyPath<Target> ? true : false,       
-            ".intf-key.key" extends keyof KeyPath<Target> ? false : true,
-            ".alias-key" extends keyof KeyPath<Target> ? false : true,
-            ".alias-key.key" extends keyof KeyPath<Target> ? true : false,            
-            Equals<Length<UnionToTuple<keyof KeyPath<Target>>>, 5>            
-            
-        ]> = true
-                
-        chai.assert.isTrue(result)
+            const result: IsAllTrue<[
+                Equals<TargetKeyPath[".key1.key2"], string | number>,
+                Equals<TargetKeyPath[".key1.key3"], number>,
+                Equals<TargetKeyPath[".key4"], null>,
+                Equals<KeyPath<Target, "/">["/key1/key2"], string | number>,
+                Equals<KeyPath<Target, ".", false>["key1.key2"], string | number>,
+                Equals<KeyPath<Target, ".", false>["key4"], null>,
+                Equals<KeyPath<Target, ".", true>[".key4"], null>,
+                ".intf-key" extends keyof TargetKeyPath ? true : false,
+                ".intf-key.key" extends keyof TargetKeyPath ? false : true,
+                ".alias-key" extends keyof TargetKeyPath ? false : true,
+                ".alias-key.key" extends keyof TargetKeyPath ? true : false,
+                Equals<Length<UnionToTuple<keyof TargetKeyPath>>, 5>,
+                Equals<Length<UnionToTuple<keyof TargetKeyPath>>, 4>,
+            ]> = true
+
+            chai.assert.isTrue(result)
+        }),
+        it("Large Object", ()=>{
+            type Target = {
+                "key1": {
+                    "key2": {
+                        "key3": {
+                            "key4": {
+                                "key5": {
+                                    "key6": {
+                                        "key7": {
+                                            "key8" : {
+                                                "key9" : {
+                                                    "key10": string,
+                                                    "key11": number
+                                                },
+                                                "key12" : Date
+                                            },
+                                            "key13": {
+                                                "key14": string,
+                                                "key15": number
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }            
+            type TargetKeyPath = KeyPath<Target>
+        
+            const result: IsAllTrue<[
+                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key8.key9.key10"], string>,
+                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key8.key9.key11"], number>,
+                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key8.key12"], Date>,
+                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key13.key14"], string>,
+                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key13.key15"], number>,
+                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key13.key15"], string>,
+            ]> = true
+
+            chai.assert.isTrue(result)
+        })
     })
     it("KeyArray", ()=>{
         interface IntfData { "key": Date }

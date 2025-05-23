@@ -7,6 +7,7 @@ type GetOneKey<T> = T extends Record<string,unknown> ? Cast<UnionHead<keyof T>, 
 
 type AddKeyPath<A, B, Sep extends string, HeadingSep extends boolean> = A extends string ? B extends string ? `${A}${Sep}${B}` : A : B extends string ? HeadingSep extends true ? `${Sep}${B}` : `${B}` : ""
 
+/*
 export type KeyPath<T, Sep extends string = ".", HeadingSep extends boolean = true, ValueType = any, ParentKey extends string|null = null> =
     [T] extends [Record<string, unknown>] ?
         // keyof {} = never
@@ -18,6 +19,65 @@ export type KeyPath<T, Sep extends string = ".", HeadingSep extends boolean = tr
                 Record<ParentKey, T> :
                 {} :
             {}
+*/
+
+export const _LEFT: unique symbol = Symbol("_LEFT")
+export const _RIGHT: unique symbol = Symbol("_RIGHT")
+
+type KeyPathSub<T, Sep extends string = ".", HeadingSep extends boolean = true, ValueType = any, ParentKey extends string|null = null> =
+    [T] extends [Record<string, unknown>] ?
+        // keyof {} = never
+        [ keyof T ] extends [ never ] ?         
+            {} :
+            {
+                [_LEFT]: KeyPathSub<T[GetOneKey<T>], Sep, HeadingSep, ValueType, AddKeyPath<ParentKey, GetOneKey<T>, Sep, HeadingSep>>,
+                [_RIGHT]: KeyPathSub<Omit<T, GetOneKey<T>>, Sep, HeadingSep, ValueType, ParentKey> 
+            } :            
+        ParentKey extends string ?
+            [T] extends [ValueType] ?
+                Record<ParentKey, T> :
+                {} :
+            {}
+
+declare const UBXP: unique symbol
+type UBXP = typeof UBXP
+
+type KeyPathUnbox<T> =
+    T extends {
+        [_LEFT]: {
+            [_LEFT]: infer LL,
+            [_RIGHT]: infer LR
+        },
+        [_RIGHT]: {
+            [_LEFT]: infer RL,
+            [_RIGHT]: infer RR
+
+        } 
+    } ? { [Key in UBXP]: KeyPathUnbox<LL> & KeyPathUnbox<LR> & KeyPathUnbox<RL> & KeyPathUnbox<RR> }[UBXP] : 
+    T extends {
+        [_LEFT]: {
+            [_LEFT]: infer LL,
+            [_RIGHT]: infer LR
+        },
+        [_RIGHT]: infer R
+    } ? { [Key in UBXP]: KeyPathUnbox<LL> & KeyPathUnbox<LR> & R }[UBXP] :    
+    T extends {
+        [_LEFT]: infer L,
+        [_RIGHT]: {
+            [_LEFT]: infer RL,
+            [_RIGHT]: infer RR
+        }        
+    } ? { [Key in UBXP]: L & KeyPathUnbox<RL> & KeyPathUnbox<RR> }[UBXP] :    
+    T extends {
+        [_LEFT]: infer L,
+        [_RIGHT]: infer R
+    } ? { [Key in UBXP]: L & R }[UBXP] :    
+    T
+
+type Merge<T> = { [Key in keyof T]: T[Key] }    
+
+export type KeyPath<T> = Merge<KeyPathUnbox<KeyPathSub<T>>>
+
 
 export type KeyArray<T, SingleKeyUnarray extends boolean = false, ParentKey extends string[] = []> =
     [ GetOneKey<T> ] extends [ never ]?
