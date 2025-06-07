@@ -14,8 +14,13 @@ This collection mainly offers type operation for structured/complicated types, l
 By using this collection, "as any" can be avoided for the complicated type of Typescript functions.
 
 <!-- ------------------------------------------------------------------------ -->
-## Object
+## KeyPath
 
+### Basic
+
+Generate key path from data type
+
+**Data Type**
 
 ```typescript
 type Sprinter = {
@@ -27,17 +32,30 @@ type Sprinter = {
 }
 ```
 
-### KeyPath
-
-Generate
+**Key Path**
 
 ```typescript
-const target:KeyPath<Sprinter, ".", false> = {
+const target:KeyPath<Sprinter> = {
     "name": "Usain Bolt"
     "best.100m" : 9.58
     "best.200m" : 19.19
 }
 ```
+
+### Key path format
+
+The format of key path is customizable.
+
+```typescript
+KeyPath<T, Sep, HeadingSep, ValueType>
+```
+
+- **T**: Data type
+- **Sep**: Separator (string, default: ".")
+- **HeadingSep**: Adding separtor at the head (boolean, default: false)
+- **ValueType**: key path is generated for the specified value type (type, default: any)
+
+### Directory path format
 
 ```typescript
 const target:KeyPath<Sprinter, "/", true> = {

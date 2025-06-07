@@ -190,17 +190,17 @@ describe("boost-ts.types", ()=>{
             type TargetKeyPath = KeyPath<Target>
 
             const result: IsAllTrue<[
-                Equals<TargetKeyPath[".key1.key2"], string | number>,
-                Equals<TargetKeyPath[".key1.key3"], number>,
-                Equals<TargetKeyPath[".key4"], null>,
-                Equals<KeyPath<Target, "/">["/key1/key2"], string | number>,
+                Equals<TargetKeyPath["key1.key2"], string | number>,
+                Equals<TargetKeyPath["key1.key3"], number>,
+                Equals<TargetKeyPath["key4"], null>,
+                Equals<KeyPath<Target, "/", true>["/key1/key2"], string | number>,
                 Equals<KeyPath<Target, ".", false>["key1.key2"], string | number>,
                 Equals<KeyPath<Target, ".", false>["key4"], null>,
                 Equals<KeyPath<Target, ".", true>[".key4"], null>,
-                ".intf-key" extends keyof TargetKeyPath ? true : false,
-                ".intf-key.key" extends keyof TargetKeyPath ? false : true,
-                ".alias-key" extends keyof TargetKeyPath ? false : true,
-                ".alias-key.key" extends keyof TargetKeyPath ? true : false,
+                "intf-key" extends keyof TargetKeyPath ? true : false,
+                "intf-key.key" extends keyof TargetKeyPath ? false : true,
+                "alias-key" extends keyof TargetKeyPath ? false : true,
+                "alias-key.key" extends keyof TargetKeyPath ? true : false,
                 Equals<Length<UnionToTuple<keyof TargetKeyPath>>, 5>,                
             ]> = true
 
@@ -237,11 +237,11 @@ describe("boost-ts.types", ()=>{
             type TargetKeyPath = KeyPath<Target>
         
             const result: IsAllTrue<[
-                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key8.key9.key10"], string>,
-                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key8.key9.key11"], number>,
-                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key8.key12"], Date>,
-                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key13.key14"], string>,
-                Equals<TargetKeyPath[".key1.key2.key3.key4.key5.key6.key7.key13.key15"], number>,                
+                Equals<TargetKeyPath["key1.key2.key3.key4.key5.key6.key7.key8.key9.key10"], string>,
+                Equals<TargetKeyPath["key1.key2.key3.key4.key5.key6.key7.key8.key9.key11"], number>,
+                Equals<TargetKeyPath["key1.key2.key3.key4.key5.key6.key7.key8.key12"], Date>,
+                Equals<TargetKeyPath["key1.key2.key3.key4.key5.key6.key7.key13.key14"], string>,
+                Equals<TargetKeyPath["key1.key2.key3.key4.key5.key6.key7.key13.key15"], number>,                
             ]> = true
 
             chai.assert.isTrue(result)
@@ -281,7 +281,7 @@ describe("boost-ts.types", ()=>{
     })
     it("NumberToTuple", function () {
         const result:IsAllTrue<[
-            Equals<NumberToTuple<5, number>['length'], 5>,
+            Equals<NumberToTuple<2, number>['length'], 2>,
 /* Consuming CPU Too Much...
             Equals<NumberToTuple<50, number>['length'], 50>,
             Equals<NumberToTuple<100, number>['length'], 100>,

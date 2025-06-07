@@ -2,27 +2,20 @@ import { Cast, Length  } from "./basic"
 import { UnionHead } from "./union"
 import { Push, Reverse, Head, Tail } from "./tuple"
 
+////////////////////////////////////////////////////////////////////////
+// Common
+////////////////////////////////////////////////////////////////////////
 
 type GetOneKey<T> = T extends Record<string,unknown> ? Cast<UnionHead<keyof T>, keyof T & string> : never
 
 type AddKeyPath<A, B, Sep extends string, HeadingSep extends boolean> = A extends string ? B extends string ? `${A}${Sep}${B}` : A : B extends string ? HeadingSep extends true ? `${Sep}${B}` : `${B}` : ""
 
-/*
-export type KeyPath<T, Sep extends string = ".", HeadingSep extends boolean = true, ValueType = any, ParentKey extends string|null = null> =
-    [T] extends [Record<string, unknown>] ?
-        // keyof {} = never
-        [ keyof T ] extends [ never ] ?         
-            {} :
-            KeyPath<T[GetOneKey<T>], Sep, HeadingSep, ValueType, AddKeyPath<ParentKey, GetOneKey<T>, Sep, HeadingSep>> & KeyPath<Omit<T, GetOneKey<T>>, Sep, HeadingSep, ValueType, ParentKey> :            
-        ParentKey extends string ?
-            [T] extends [ValueType] ?
-                Record<ParentKey, T> :
-                {} :
-            {}
-*/
-
 export const _LEFT: unique symbol = Symbol("_LEFT")
 export const _RIGHT: unique symbol = Symbol("_RIGHT")
+
+////////////////////////////////////////////////////////////////////////
+// KeyPath
+////////////////////////////////////////////////////////////////////////
 
 type KeyPathSub<T, Sep extends string = ".", HeadingSep extends boolean = true, ValueType = any, ParentKey extends string|null = null> =
     [T] extends [Record<string, unknown>] ?
@@ -74,10 +67,11 @@ type KeyPathUnbox<T> =
     } ? { [Key in UBXP]: L & R }[UBXP] :    
     T
 
-type Merge<T> = { [Key in keyof T]: T[Key] }    
+export type KeyPath<T, Sep extends string = ".", HeadingSep extends boolean = false, ValueType = any> = KeyPathUnbox<KeyPathSub<T,Sep,HeadingSep,ValueType>>
 
-export type KeyPath<T, Sep extends string = ".", HeadingSep extends boolean = true, ValueType = any> = Merge<KeyPathUnbox<KeyPathSub<T,Sep,HeadingSep,ValueType>>>
-
+////////////////////////////////////////////////////////////////////////
+// KeyArray
+////////////////////////////////////////////////////////////////////////
 
 export type KeyArray<T, SingleKeyUnarray extends boolean = false, ParentKey extends string[] = []> =
     [ GetOneKey<T> ] extends [ never ]?
