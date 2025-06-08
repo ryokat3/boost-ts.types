@@ -1,7 +1,14 @@
 import * as chai from "chai"
-import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Reverse, Append, Plus, TupleToUnion, ZipFind,
-    IsUnion, UnionHead, UnionTail, UnionToTuple, KeyPath, KeyArray, KeyArrayApply, NumberToTuple } from "../src/index"
+//import { IsAllTrue, Equals, NotEquals, None, Length, Cast, Last, Initial, Push, Reverse, Append, Plus, TupleToUnion, ZipFind,
+//    IsUnion, UnionHead, UnionTail, UnionToTuple, NumberToTuple, KeyPath, KeyArray, KeyArrayApply} from "../src/index"
 
+import { Cast, Length, } from "../src/basic"
+import { At, Head, Tail, Last, Initial, Push, Append, Plus, Reverse, TupleOmit, TuplePick, TupleFind, TupleZip, TupleUnzip, ZipFind, TupleToUnion } from "../src/tuple"
+import { KeyPath, KeyArray, KeyArrayApply } from "../src/KeyPath"
+import { IsUnion, UnionHead, UnionTail, UnionToTuple } from "../src/union"
+import { None } from "../src/None"
+import { Decrease, Comp, NumberToTuple } from "../src/number"
+import { Equals, NotEquals, IsAllTrue } from "../src/test"
 
 describe("boost-ts.types", ()=>{
 
@@ -279,19 +286,21 @@ describe("boost-ts.types", ()=>{
                 
         chai.assert.isTrue(result)
     })
+
     it("NumberToTuple", function () {
         const result:IsAllTrue<[
             Equals<NumberToTuple<2, number>['length'], 2>,
-/* Consuming CPU Too Much...
+/* Consuming CPU Too Much...                
             Equals<NumberToTuple<50, number>['length'], 50>,
             Equals<NumberToTuple<100, number>['length'], 100>,
             Equals<NumberToTuple<500, number>['length'], 500>,
             Equals<NumberToTuple<1000, number>['length'], 1000>,
-*/        
+*/                
         ]> = true
                 
         chai.assert.isTrue(result)
     })
+
     it("Tail", ()=>{
 
         const result:IsAllTrue<[

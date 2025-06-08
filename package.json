@@ -1,17 +1,18 @@
 {
   "name": "boost-ts.types",
-  "version": "0.3.1",
+  "version": "0.3.4",
   "description": "Typescript advanced type collection",
-  "types": "src/index.ts",
+  "main": "index.ts",
   "scripts": {
     "test": "mocha 'test/**/*.ts'",
-    "clean": "shx rm -rf dist tmp boost-ts.types*.tgz"  
+    "clean": "shx rm -rf dist tmp boost-ts.types*.tgz",
+    "release": "shx mkdir dist && shx cp package.json README.md LICENSE src/* dist && cd dist && npm pack --pack-destination .."
   },
   "files": [
     "package.json",
     "README.md",
     "LICENSE",
-    "src"
+    "*.ts"
   ],
   "repository": {
     "type": "git",
